@@ -1,0 +1,153 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 320px;
+            box-shadow: 0 4px 15px #0002;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4338ca;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3730a3;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Currency Converter</h2>
+
+        <label for="amount">Enter Amount</label>
+        <input type="number" id="amount" value="1" min="0.01" step="any">
+
+        <label for="from">From Currency</label>
+        <select id="from">
+            <option value="USD">USD - US Dollar</option>
+            <option value="INR" selected>INR - Indian Rupee</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="CAD">CAD - Canadian Dollar</option>
+        </select>
+
+        <label for="to">To Currency</label>
+        <select id="to">
+            <option value="USD">USD - US Dollar</option>
+            <option value="INR">INR - Indian Rupee</option>
+            <option value="EUR" selected>EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="CAD">CAD - Canadian Dollar</option>
+        </select>
+
+        <button onclick="convertCurrency()">Convert</button>
+
+        <p id="result">Conversion result will appear here.</p>
+    </div>
+
+    <script>
+        const API_KEY = "ab37e7f928b5d3f623c0d00b";
+
+        async function convertCurrency() {
+            const amount = Number(document.getElementById("amount").value);
+            const from = document.getElementById("from").value;
+            const to = document.getElementById("to").value;
+            const result = document.getElementById("result");
+
+            if (!Number.isFinite(amount) || amount <= 0) {
+                result.textContent = "Please enter a valid amount.";
+                return;
+            }
+
+            if (from === to) {
+                result.textContent =
+                    `${amount.toFixed(2)} ${from} = ${amount.toFixed(2)} ${to}`;
+                return;
+            }
+
+            result.textContent = "Converting...";
+
+            try {
+                const url =
+                    `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${from}/${to}/${amount}`;
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error("Unable to contact the API.");
+                }
+
+                const data = await response.json();
+
+                if (data.result !== "success") {
+                    throw new Error(data["error-type"] || "API request failed.");
+                }
+
+                result.textContent =
+                    `${amount} ${from} = ${data.conversion_result.toFixed(2)} ${to}`;
+
+            } catch (error) {
+                result.textContent =
+                    "Error: " + error.message +
+                    " Check your API key and internet connection.";
+            }
+        }
+    </script>
+</body>
+</html>
+```

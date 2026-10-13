@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>dropbox application</title>
+        <html meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>click here to upload your files</h1>
+        <input type="file" id="fileinput">
+        <button onclick="upload()">upload</button>
+        <p id="result"></p>
+        <script>
+            async function upload(){
+                const result=document.getElementById('fileinput').files[0];
+                if(!result){
+                    alert('select a file');
+                    return;
+                }
+                const response=await fetch('https://content.dropboxapi.com/2/files/upload',
+                {
+             method:'POST',
+             headers:{
+                'Authorization':'Bearer sl.u.AGxri9e1x3TF3evAezoG1bI5UbFVuOfYHD60lFGimlwcg-5yf66zmmIr1kzMWkKjYx6X9kTjI6FY7LerBHR3EyCtje-vDOYC59ltwqw8urdD10Jaw4-p4z0xXJSOrsdONoMAMkQ4i19XiCQftuL9J2WuKcqUjY-P9pCMHRDYPOPyeA9Cuk4OZDPvshfwcgRMFESMuoCZGPFeVmyQcKVz01Nsihogv-XDJSw2-IDtnFGIlSgfyk0cqDceN-5LXDXwlx03lukREUoTzgOBTaUl7mrfh99HoB9ZPV-JxvacFP57Gp7kdwPVfiFQkvVHuKB6Cmj34L8W0fTK2bcv4-bhjsE_NhrAIiIET-SHYVPAhh0Zulx5hzJCRndt4ROaFIpmv21jXnF3Quav0yl8V0n5S-MeqSnHhlgGNwVfEL4YYFTVLVF2g_QyFL3bB0flDNL5uwjFtd5g9n5e-xAn5XL-ZhN241gllMS-jta7WND3gme_dsWX81ewci0fPa1q6Fwn01U8fHfVojGQaYrYGi1loXXT5tJXgtus9G1KMB9k-lNPt3Zsl7Pu4owiQBPaUdJ5IdAWZBuIUYCEMRfr-460_1cDygJY8R3bcaxeylFdrgEsIuvpCYdWtmxVSg0TL1CvSaBvt63yWjEF4WI-Xh6oz-EComxzizijyKOanhYernrTUQS-ph6FXL2sqBKvoJFfbU89NicVK86S_say_XJgwnCVyMR0do0xNH0sAgO0oyocZ-yD7qudXGl7hXRDkvVH_gsPdkvey_MwLq6VyyX-A1Dr81VK9KAM-i8b-lXBrtgEYvUtCOknMk9f66lYXUcfLzSLf80Z3er0EgWrhuzxNj6EmIj2553wZ98LN1cNZRVT-qqLP3IvEt_3y95NITwBcV1AYv8OOdTU67PfBxqTqRjwEI-oMDge9TOSS2Y2tzzkyyRY11Af7lj-ZDfxxYCu-EjuigcTW--wQDE95O0UIx3oLgTaZrVHo5ACGO_J9q7ct34J1koU3dQ-pGwPRiX17Ew8PtrOYcrsEVDamWIxECejW8PLYLy_dMUQ89kslXJLfOA04LI0sUZyiWSRNgUDjHH1Mb6lqNo78bgMvEWAidhUCivozHz5RKU6JWY_W7u9_wzNTTfTNZOXzuanq2CZAbQ6YSmMz9HhNJlCwA9pgvAEeU8meJymYCsg2B0vouEZ9QFkh6keprkTShda_5FvnZDo0anZf4BZQKu8HGec_Uiveuy22vJ90TwbmC73-5-fSmVPClHBRB8Lbztz1tBc5wXHkCB34YIDjEHr3JAEgWPx8c2eqFW6zIlc8ZOOzJKsS3k7bViAZSUHmroWg8Y32JrbQSfclCSGSsnAx-kIFyiQYo8Knfp8MUk6hYLCrQ5gewZcJ4vDdqwXcIxAVWiSzipbyteeYV81YPTwAuTO00I0',
+                'Dropbox-API-arg':JSON.stringify({
+                path: '/'+result.name,
+                mode:"add",
+                autorename:true
+                }),
+                "Content-Type":"application/octet-stream"
+               },
+               body:result
+                }
+            );
+            const data=await response.json();
+            document.getElementById("result").innerText =
+                response.ok
+                    ? "File uploaded successfully!"
+                    : "Upload failed: " + (data.error_summary || "Error");
+            }
+            </script>
+    </body>
+</html>
