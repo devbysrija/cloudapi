@@ -1,7 +1,7 @@
 
 const { MongoClient } = require("mongodb");
 
-const uri = "YOUR_MONGODB_ATLAS_CONNECTION_STRING";
+const uri = "mongodb+srv://srija_db_user:srijaatlas@cluster0.bhqxqzi.mongodb.net/";
 
 async function main() {
     const client = new MongoClient(uri);
